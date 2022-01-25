@@ -3,8 +3,8 @@ import kotlin.random.nextInt
 
 var narrationModifier: (String) -> String = { it }
 
-fun narrate(message: String) {
-  println(narrationModifier(message))
+inline fun narrate(message: String, modifier: (String) -> String = { narrationModifier(it) }) {
+  println(modifier(message))
 }
 
 fun changeNarratorMood() {
