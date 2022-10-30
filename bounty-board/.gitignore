@@ -26,3 +26,6 @@
 hs_err_pid*
 replay_pid*
 /build/
+/gradle/wrapper/gradle-wrapper.properties
+/gradlew
+/gradlew.bat
