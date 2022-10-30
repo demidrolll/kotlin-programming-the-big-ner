@@ -38,11 +38,10 @@ fun visitTavern() {
 
   narrate("$heroName sees several patrons in the tavern:")
   narrate(patrons.joinToString())
-  println(patronGold)
   repeat(3) {
     placeOrder(patrons.random(), menuItems.random(), patronGold)
   }
-  println(patronGold)
+  displayPatronBalances(patronGold)
 }
 
 private fun placeOrder(
@@ -59,5 +58,12 @@ private fun placeOrder(
     patronGold[TAVERN_MASTER] = patronGold.getValue(TAVERN_MASTER) + itemPrice
   } else {
     narrate("$TAVERN_MASTER says, \"You need more coin for a $menuItemName\"")
+  }
+}
+
+private fun displayPatronBalances(patronGold: Map<String, Double>) {
+  narrate("$heroName intuitively knows how much money each patron has")
+  patronGold.forEach { (patron, balance) ->
+    narrate("$patron has ${"%.2f".format(balance)} gold")
   }
 }
