@@ -1,4 +1,6 @@
 import java.io.File
+import java.lang.Math.random
+import kotlin.random.Random
 
 private const val TAVERN_MASTER = "Taernyl"
 private const val TAVERN_NAME = "$TAVERN_MASTER's Folly"
@@ -39,25 +41,31 @@ fun visitTavern() {
   narrate("$heroName sees several patrons in the tavern:")
   narrate(patrons.joinToString())
   repeat(3) {
-    placeOrder(patrons.random(), menuItems.random(), patronGold)
+    placeOrder(patrons.random(), patronGold)
   }
   displayPatronBalances(patronGold)
 }
 
 private fun placeOrder(
   patronName: String,
-  menuItemName: String,
   patronGold: MutableMap<String, Double>,
 ) {
-  val itemPrice = menuItemPrices.getValue(menuItemName)
   narrate("$patronName speaks with $TAVERN_MASTER to place an order")
-  if (itemPrice <= patronGold.getOrDefault(patronName, 0.0)) {
-    narrate("$TAVERN_MASTER hands $patronName a $menuItemName")
-    narrate("$patronName pays $TAVERN_MASTER $itemPrice gold")
-    patronGold[patronName] = patronGold.getValue(patronName) - itemPrice
-    patronGold[TAVERN_MASTER] = patronGold.getValue(TAVERN_MASTER) + itemPrice
+  val ordersCount = Random.nextInt(3) + 1
+  val orderedItems = mutableListOf<String>()
+  var totalSum = 0.0
+  repeat(ordersCount) {
+    val item = menuItems.random()
+    orderedItems += item
+    totalSum += menuItemPrices.getValue(item)
+  }
+  narrate("$patronName ordered $orderedItems, total sum: $totalSum")
+  if (totalSum <= patronGold.getOrDefault(patronName, 0.0)) {
+    narrate("$patronName pays $TAVERN_MASTER $totalSum gold")
+    patronGold[patronName] = patronGold.getValue(patronName) - totalSum
+    patronGold[TAVERN_MASTER] = patronGold.getValue(TAVERN_MASTER) + totalSum
   } else {
-    narrate("$TAVERN_MASTER says, \"You need more coin for a $menuItemName\"")
+    narrate("$TAVERN_MASTER says, \"You need more coin\"")
   }
 }
 
